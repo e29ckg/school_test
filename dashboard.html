@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
+	<meta name="author" content="AdminKit">
+	<meta name="keywords" content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
+
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link rel="shortcut icon" href="img/icons/icon-48x48.png" />
+
+	<link rel="canonical" href="https://demo-basic.adminkit.io/pages-blank.html" />
+
+	<title>School Test</title>
+
+	<link href="css/app.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+	<link class="js-stylesheet" href="css/light.css" rel="stylesheet">
+	<link rel="stylesheet" href="./node_modules/sweetalert2/dist/sweetalert2.min.css">
+	<!-- <script src="js/settings.js"></script> -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Prompt&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Prompt', sans-serif;
+        }
+		
+		/* Optional: Add some CSS to style elements with v-cloak */
+		[v-cloak] {
+		display: none;
+		}
+  </style>
+</head>
+
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar js-sidebar">
+			<div class="sidebar-content js-simplebar">
+				<a class="sidebar-brand" href="index.html">
+					<span class="align-middle">School Test</span>
+				</a>
+
+				<ul class="sidebar-nav">
+					<li class="sidebar-header">
+						Pages
+					</li>
+
+					<li class="sidebar-item active">
+						<a class="sidebar-link" href="dashboard.html">
+							<i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+						</a>
+					</li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="quiz.html">
+							<i class="align-middle" data-feather="hash"></i> <span class="align-middle">quiz</span>
+						</a>
+					</li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="index.html">
+							<i class="align-middle" data-feather="settings"></i> <span class="align-middle">Admin</span>
+						</a>
+					</li>
+										
+				</ul>
+				
+			</div>
+		</nav>
+
+		<div class="main" id="dashboard" v-cloak>
+			<nav class="navbar navbar-expand navbar-light navbar-bg">
+				<a class="sidebar-toggle js-sidebar-toggle">
+					<i class="hamburger align-self-center"></i>
+				</a>
+
+				<div class="navbar-collapse collapse">
+					<ul class="navbar-nav navbar-align">
+						
+						<li class="nav-item dropdown">
+							
+							<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal" >
+								CountDown30s
+							  </button> 
+							<a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
+								<span class="text-dark">เลือกการแข่งขัน</span>
+							</a>
+							<div class="dropdown-menu dropdown-menu-end">
+								<a class="dropdown-item" href="#" v-for="qz in quizs" @click="q_id = qz.q_id">
+									<i class="align-middle me-1" data-feather="user"></i> {{qz.q_name}}</a>
+								
+							</div>
+						</li>
+					</ul>
+				</div>
+			</nav>
+
+			<main class="content" >
+				<div class="container-fluid p-0">
+
+					<!-- <h1 class="h3 mb-3" @click="test()">Blank Page</h1> -->
+					
+					<div class="row">
+						<div class="col-12 col-lg-18 col-xxl-9 d-flex">
+							<div class="card flex-fill">
+								<div class="card-header">
+
+									<h5 class="card-title mb-0">{{q_name}}</h5>
+								</div>
+								<table class="table table-hover my-0">
+									<thead>
+										<tr class="text-center">
+											<!-- <th class="d-none d-sm-block" @click="order_by = 'ลำดับ'">#</th> -->
+											<th class="d-xl-table-cell" @click="order('ลำดับ')"><a href="#">#</a></th>
+											<th class="d-xl-table-cell" @click="order('ลำดับ')"><a href="#">ชื่อโรงเรียน</a></th>
+											<th class="d-xl-table-cell text-center" @click="order('คะแนน')"><a href="#">คะแนนที่ได้</a></th>
+											
+										</tr>
+									</thead>
+									<tbody >
+										<tr  v-for="d,index in datas" >
+											<!-- <td class="d-none d-sm-block text-center" >{{d.sch_no}}</td> -->
+											<!-- <td class="text-center">{{index +1}}</td> -->
+											<td class="text-center">
+												<img :src="d.pic" alt="Photo" height="85">
+												<br>No.{{d.sch_no}}											
+											</td>
+											<td class="d-xl-table-cell" @click="show_modal_award(index)">
+												<div class="row">
+													<h2>{{d.sch_name}} <span class="badge badge-sx bg-danger" v-if="d.award !=='รอผล'">{{d.award}}</span></h2> 
+												</div>
+												<div>
+													<!-- {{d.quiz_anser}} -->
+													<span class="badge bg-success me-1" v-for="qa in d.quiz_anser">{{qa}}</span>
+												</div>
+												
+											</td>
+											<td class="d-xl-table-cell text-center">
+												<h1>{{d.quiz_anser_count}}</h1>
+											</td>
+										</tr>
+
+										
+										
+									</tbody>
+								</table>
+								<button hidden  type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_award" ref="modal_button_award">
+									award 
+								</button>
+								<!-- {{schools}} -->
+							</div>
+						</div>
+					</div>
+
+					<!-- <button  type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal" ref="modal_button" >
+						video 
+					  </button> -->
+					  <!-- Modal -->
+					<div class="modal fade" id="modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+						<div class="modal-dialog modal-lg">
+							<div class="modal-content">
+								<div class="modal-header">
+								<!-- <h1 class="modal-title fs-5" id="staticBackdropLabel"></h1> -->
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+								</div>
+								<div class="modal-body text-center">
+									<video width="800" height="400" controls>
+										<source src="./video/ct-30s.mp4" type="video/mp4">
+										Your browser does not support the video tag.
+									</video>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >ปิด</button>
+								
+									</div>
+								</div>
+							<div>
+						</div>
+					</div>
+					
+
+				</div>
+				
+				
+			</main>
+
+			<section>
+
+				<!-- <button  type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_award" ref="modal_button_award">
+					award 
+				</button> -->
+				  <!-- Modal -->
+				<div class="modal fade" id="modal_award" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+					<div class="modal-dialog modal-lg">
+							  <div class="modal-content">
+								<div class="modal-header">
+								<!-- <h1 class="modal-title fs-5" id="staticBackdropLabel"></h1> -->
+									<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ref="modal_button_award_close"></button>
+								</div>
+								<div class="modal-body text-center">
+									<!-- {{school}}
+									{{url_video}} -->
+									<div class="row">
+										<div class="col-2 " >
+											  <label for="ex0" class="form-label">ลำดับ</label>
+											  <input type="number" min="0" class="form-control" id="ex0" placeholder="ลำดับ"  v-model="school.sch_no" disabled>
+										</div>                      
+										<div class="col-7">
+											<label for="ex1" class="form-label">ชื่อโรงเรียน</label>
+											<input type="text" class="form-control" id="ex1" placeholder="ชื่อโรงเรียน"  v-model="school.sch_name" disabled>
+										</div>                      
+										<div class="col-3">
+											<label for="ex1" class="form-label">ได้รับรางวัล</label>
+											<select name="st" id="st" v-model="school.award" class="form-control">
+												<option v-for="aw in awards" :value="aw">{{aw}}</option>
+											</select>
+										</div>                      
+									</div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" ref="modal_button_award_close" @click="modal_school_close()">ปิด</button>
+									<button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="school_save()">บันทึก</button>
+							
+								</div>
+							</div>
+						<div>
+					</div>
+				</div>
+			</section>
+
+
+
+			<footer class="footer">
+				<div class="container-fluid">
+					<div class="row text-muted">
+						<div class="col-6 text-start">
+							<p class="mb-0">
+								<a class="text-muted" href="https://adminkit.io/" target="_blank"><strong>AdminKit</strong></a> &copy;
+							</p>
+						</div>
+						<div class="col-6 text-end">
+							<ul class="list-inline">
+								<li class="list-inline-item">
+									<a class="text-muted" href="https://adminkit.io/" target="_blank">Support</a>
+								</li>
+								<li class="list-inline-item">
+									<a class="text-muted" href="https://adminkit.io/" target="_blank">Help Center</a>
+								</li>
+								<li class="list-inline-item">
+									<a class="text-muted" href="https://adminkit.io/" target="_blank">Privacy</a>
+								</li>
+								<li class="list-inline-item">
+									<a class="text-muted" href="https://adminkit.io/" target="_blank">Terms</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</footer>
+		</div>
+	</div>
+
+</script>
+
+	<script src="js/app.js"></script>
+	<script src="./node_modules/sweetalert2/dist/sweetalert2.min.js"></script>
+	<script src="./node_modules/vue/dist/vue.global.js"></script>
+	<script src="./node_modules/vue/dist/vue.global.prod.js"></script>
+
+
+	<script src="./node_modules/axios/dist/axios.min.js"></script>
+	<script src="./js/dashboard.js"></script>
+</body>
+
+</html>
